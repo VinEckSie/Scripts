@@ -1,5 +1,33 @@
 ///<reference path="typings/globals/xrm/index.d.ts" />
 
+this.RefreshLoanData = function (primaryControl)
+{
+    var functionName = "PBAPI";
+    var parameters = {}; 
+
+    var actionName = functionName.toLowerCase();
+
+    var req = new XMLHttpRequest();
+    req.open("POST", "https://org859aecd5.crm16.dynamics.com/api/data/v9.2/" + actionName, true);
+    req.setRequestHeader("OData-MaxVersion", "4.0");
+    req.setRequestHeader("OData-Version", "4.0");
+    req.setRequestHeader("Accept", "application/json");
+    req.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+    req.onreadystatechange = function () {
+        if (this.readyState === 4) {
+            req.onreadystatechange = null;
+            if (this.status === 200) {
+                var results = JSON.parse(this.response);
+                // handle the response from the flow
+            } else {
+                var error = JSON.parse(this.response).error;
+                // handle the error
+            }
+        }
+    };
+    req.send(JSON.stringify(parameters));
+}
+
 this.platformOnLoad = function (executionContext)
 {
 	var formContext = executionContext.getFormContext(); 
