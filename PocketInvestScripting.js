@@ -2,6 +2,7 @@
 
 this.RefreshLoanData = function (primaryControl)
 {
+    var formContext = executionContext.getFormContext(); 
     var parameters = {}; 
 
     var req = new XMLHttpRequest();
@@ -16,13 +17,14 @@ this.RefreshLoanData = function (primaryControl)
             req.onreadystatechange = null;
             if (this.status === 200) {
                 var results = JSON.parse(this.response);
-                primaryControl.ui.setFormNotification("Loan list refreshed", "INFO", "1");
+                formContext.ui.setFormNotification("Loan list refreshed", "INFO", "1");
             } else {
                 var error = JSON.parse(this.response).error;
-                primaryControl.ui.setFormNotification("An error occurred: " + error.message, "ERROR", "2");
+                formContext.ui.setFormNotification("An error occurred: " + error.message, "ERROR", "2");
             }
         }
     };
+
     req.send(JSON.stringify(parameters));
 }
 
@@ -124,7 +126,8 @@ function SetUpRecommendation(executionContext)
 // *** PARAMS:
 // ***  fieldName = The name of the optionset field
 // ***  setText = The text to set the optionset with
-function SetOptionSet(fieldName, setText) {
+function SetOptionSet(fieldName, setText)
+{
 	try {
 		var control = Xrm.Page.getAttribute(fieldName);
 
