@@ -2,7 +2,6 @@
 
 this.RefreshLoanData = function (primaryControl)
 {
-    var formContext = executionContext.getFormContext(); 
     var parameters = {}; 
 
     var req = new XMLHttpRequest();
@@ -17,14 +16,13 @@ this.RefreshLoanData = function (primaryControl)
             req.onreadystatechange = null;
             if (this.status === 200) {
                 var results = JSON.parse(this.response);
-                formContext.ui.setFormNotification("Loan list refreshed", "INFO", "1");
+                // handle the response from the flow
             } else {
                 var error = JSON.parse(this.response).error;
-                formContext.ui.setFormNotification("An error occurred: " + error.message, "ERROR", "2");
+                // handle the error
             }
         }
     };
-
     req.send(JSON.stringify(parameters));
 }
 
