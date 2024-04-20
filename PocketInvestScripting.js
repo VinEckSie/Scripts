@@ -2,31 +2,30 @@
 
 this.RefreshLoanData = function (primaryControl)
 {
-    var functionName = "PBAPI";
     var parameters = {}; 
 
-    var actionName = functionName.toLowerCase();
-
     var req = new XMLHttpRequest();
-    req.open("POST", "https://org859aecd5.crm16.dynamics.com/api/data/v9.2/" + actionName, true);
+    req.open("POST", "https://prod-08.germanywestcentral.logic.azure.com:443/workflows/639ed33d83c34e00a42b9bcd5a22cd9f/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=oJiX9dPVckd5KtvqpPuxz3CIK1kvEnK0oPJRKwLPFyc", true);
     req.setRequestHeader("OData-MaxVersion", "4.0");
     req.setRequestHeader("OData-Version", "4.0");
     req.setRequestHeader("Accept", "application/json");
     req.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+    
     req.onreadystatechange = function () {
         if (this.readyState === 4) {
             req.onreadystatechange = null;
             if (this.status === 200) {
                 var results = JSON.parse(this.response);
-                // handle the response from the flow
+                primaryControl.ui.setFormNotification("Loan list refreshed", "INFO", "1");
             } else {
                 var error = JSON.parse(this.response).error;
-                // handle the error
+                primaryControl.ui.setFormNotification("An error occurred: " + error.message, "ERROR", "2");
             }
         }
     };
     req.send(JSON.stringify(parameters));
 }
+
 
 this.platformOnLoad = function (executionContext)
 {
